@@ -1,3 +1,5 @@
+using System;
+
 namespace MeiFarmWebApi.Models
 {
     public class SolventModel : BaseFarmModel

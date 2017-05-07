@@ -1,10 +1,12 @@
-﻿using MeiFarmWebApi.Interfaces;
+﻿using MeiFarmWebApi.Contexts;
+using MeiFarmWebApi.Interfaces;
 using MeiFarmWebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeiFarmWebApi
 {
@@ -25,6 +27,12 @@ namespace MeiFarmWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string conn = "Server=ALEXPC\\SQLEXPRESS;Database=FarmDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+            // added the db context for the recipeContext
+            // Run dotnet ef migrations add InitialCreate to scaffold a migration and create the initial set of tables for the model.
+            // Run dotnet ef database update to apply the new migration to the database. This command creates the database before applying migrations.
+            services.AddDbContext<FarmAppContext>(options => options.UseSqlServer(conn));
+            
             services.AddTransient<IConnectionService, ConnectionService>();
             // Add framework services.
             services.AddMvc();
