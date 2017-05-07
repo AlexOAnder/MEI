@@ -107,21 +107,18 @@ namespace MeiFarmWebApi.Migrations
                 {
                     b.HasOne("MeiFarmWebApi.Models.MedicamentModel", "AdditionalMedicament")
                         .WithMany()
-                        .HasForeignKey("AdditionalMedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AdditionalMedicamentId");
 
                     b.HasOne("MeiFarmWebApi.Models.MedicamentModel", "Medicament")
                         .WithMany()
-                        .HasForeignKey("MedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MedicamentId");
                 });
 
             modelBuilder.Entity("MeiFarmWebApi.Models.UserModel", b =>
                 {
                     b.HasOne("MeiFarmWebApi.Models.OrganizationModel", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OrganizationId");
                 });
         }
     }
