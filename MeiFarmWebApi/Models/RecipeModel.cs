@@ -30,10 +30,12 @@ namespace MeiFarmWebApi.Models
 
         /*[ForeignKey("AdditionalMedicamentId")]*/
         public virtual MedicamentModel AdditionalMedicament { get; set; }
-
         [Required]
         public DateTime Created { get; set; }
+        public Guid CreatedById {get;set;}
+        public UserModel CreatedBy {get;set;}
         public DateTime Expired { get; set; }
+
         [Required]
         public bool IsPaidReceipt { get; set; }
         public bool AutoUpdatableRecipe { get; set; }

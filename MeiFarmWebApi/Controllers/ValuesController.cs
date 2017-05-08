@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MeiFarmWebApi.Contexts;
+using MeiFarmWebApi.Models;
 
 namespace MeiFarmWebApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        FarmAppContext db;
+        public ValuesController(FarmAppContext context)
+        {
+            this.db = context;
+        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()

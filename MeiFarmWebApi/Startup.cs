@@ -31,6 +31,8 @@ namespace MeiFarmWebApi
             // added the db context for the recipeContext
             // Run dotnet ef migrations add InitialCreate to scaffold a migration and create the initial set of tables for the model.
             // Run dotnet ef database update to apply the new migration to the database. This command creates the database before applying migrations.
+            // dotnet ef database update 0 to return to a clean db (instead of 0 we can put the name of the migration. 0 is a clean db)
+            // dotnet ef migrations remove to remove last of the migrations
             services.AddDbContext<FarmAppContext>(options => options.UseSqlServer(conn));
             
             services.AddTransient<IConnectionService, ConnectionService>();

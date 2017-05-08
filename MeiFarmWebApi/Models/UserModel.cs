@@ -11,10 +11,9 @@ namespace MeiFarmWebApi.Models
         [Key]
         public Guid Id { get; set; }
         public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public DateTime BrithDate { get; set; }
+        public string LastName { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Sex { get; set; }
-        public int UserType { get; set; }
         
         [ForeignKey("Organization")]
         public Guid OrganizationId {get;set;}

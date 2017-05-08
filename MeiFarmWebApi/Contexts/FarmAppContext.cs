@@ -7,12 +7,17 @@ namespace MeiFarmWebApi.Contexts
     {
         public FarmAppContext(DbContextOptions<FarmAppContext> options) : base(options)
         {
- 
+           
         }
         public DbSet<RecipeModel> Recipes { get; set;  }
         public DbSet<UserModel> Users { get; set;  }
         public DbSet<MedicamentModel> Medicaments {get;set;}
         public DbSet<OrganizationModel> Organizations {get;set;}
+        public DbSet<MedicamentsTypesModel> MedicamentsTypes {get;set;}
+        public DbSet<RecipesTypeModel>  RecipesTypes {get;set;}
+
+        public DbSet<RoleModel> Roles {get;set;}
+        public DbSet<UsersToRolesModel> UsersToRoles {get;set;}
 
      /*   protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
