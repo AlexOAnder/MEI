@@ -16,8 +16,11 @@ namespace MeiFarmWebApi.Models
         public string Sex { get; set; }
         
         [ForeignKey("Organization")]
-        public Guid OrganizationId {get;set;}
+        public Guid? OrganizationId {get;set;}
         public OrganizationModel Organization { get; set; }
+        [ForeignKey("Role")]
+        public Guid RoleId {get;set;}
+        public RoleModel Role {get;set;}
         public string AdditionInfo { get; set; }
     }
 }

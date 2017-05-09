@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MeiFarmWebApi
 {
@@ -34,8 +35,16 @@ namespace MeiFarmWebApi
             // dotnet ef database update 0 to return to a clean db (instead of 0 we can put the name of the migration. 0 is a clean db)
             // dotnet ef migrations remove to remove last of the migrations
             services.AddDbContext<FarmAppContext>(options => options.UseSqlServer(conn));
-            
+          /*  services.AddDbContext<IdentityDbContext>(options => 
+                    options.UseSqlServer(conn, 
+                        optionsBuilder => optionsBuilder.MigrationsAssembly("MeiFarmWebApi"))); 
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();*/
+
             services.AddTransient<IConnectionService, ConnectionService>();
+            services.AddTransient<IRecipeService, RecipeService>();
             // Add framework services.
             services.AddMvc();
         }
@@ -52,7 +61,8 @@ namespace MeiFarmWebApi
             }
             
             loggerFactory.AddDebug();
-
+           /* app.UseIdentity();
+            app.UseStaticFiles();  */
             app.UseMvc();
         }
     }

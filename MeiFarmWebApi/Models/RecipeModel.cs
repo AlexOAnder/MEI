@@ -17,10 +17,9 @@ namespace MeiFarmWebApi.Models
         public Guid Id { get; set; }
 
         [Required]
-        [InverseProperty("Medicament")]
+        [InverseProperty("Medicament")] //foreign key
         public Guid MedicamentId { get; set; }
 
-       /* [ForeignKey("MedicamentId")]*/
         [Required]
         public virtual MedicamentModel Medicament { get; set; }
 
@@ -28,17 +27,15 @@ namespace MeiFarmWebApi.Models
         [InverseProperty("AdditionalMedicament")]
         public Guid AdditionalMedicamentId { get; set; }
 
-        /*[ForeignKey("AdditionalMedicamentId")]*/
         public virtual MedicamentModel AdditionalMedicament { get; set; }
         [Required]
         public DateTime Created { get; set; }
         public Guid CreatedById {get;set;}
         public UserModel CreatedBy {get;set;}
         public DateTime Expired { get; set; }
-
-        [Required]
-        public bool IsPaidReceipt { get; set; }
-        public bool AutoUpdatableRecipe { get; set; }
+        [ForeignKey("RecipeType")]
+        public Guid RecipeTypeId{get;set;}
+        public RecipesTypeModel RecipeType {get;set;}
         public string AdditionInfo { get; set; }
     }
 }

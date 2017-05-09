@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MeiFarmWebApi.Migrations
 {
-    public partial class InitialMigrations : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,7 +86,8 @@ namespace MeiFarmWebApi.Migrations
                     BirthDate = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    OrganizationId = table.Column<Guid>(nullable: false),
+                    OrganizationId = table.Column<Guid>(nullable: true),
+                    RoleId = table.Column<Guid>(nullable: false),
                     Sex = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -98,6 +99,12 @@ namespace MeiFarmWebApi.Migrations
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,12 +114,11 @@ namespace MeiFarmWebApi.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     AdditionInfo = table.Column<string>(nullable: true),
                     AdditionalMedicamentId = table.Column<Guid>(nullable: false),
-                    AutoUpdatableRecipe = table.Column<bool>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     CreatedById = table.Column<Guid>(nullable: false),
                     Expired = table.Column<DateTime>(nullable: false),
-                    IsPaidReceipt = table.Column<bool>(nullable: false),
-                    MedicamentId = table.Column<Guid>(nullable: false)
+                    MedicamentId = table.Column<Guid>(nullable: false),
+                    RecipeTypeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,30 +141,12 @@ namespace MeiFarmWebApi.Migrations
                         principalTable: "Medicaments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UsersToRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsersToRoles", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_UsersToRoles_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
+                        name: "FK_Recipes_RecipesTypes_RecipeTypeId",
+                        column: x => x.RecipeTypeId,
+                        principalTable: "RecipesTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UsersToRoles_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -182,13 +170,18 @@ namespace MeiFarmWebApi.Migrations
                 column: "MedicamentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Recipes_RecipeTypeId",
+                table: "Recipes",
+                column: "RecipeTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_OrganizationId",
                 table: "Users",
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersToRoles_RoleId",
-                table: "UsersToRoles",
+                name: "IX_Users_RoleId",
+                table: "Users",
                 column: "RoleId");
         }
 
@@ -198,25 +191,22 @@ namespace MeiFarmWebApi.Migrations
                 name: "Recipes");
 
             migrationBuilder.DropTable(
-                name: "RecipesTypes");
-
-            migrationBuilder.DropTable(
-                name: "UsersToRoles");
-
-            migrationBuilder.DropTable(
                 name: "Medicaments");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "RecipesTypes");
 
             migrationBuilder.DropTable(
                 name: "MedicamentsTypes");
 
             migrationBuilder.DropTable(
                 name: "Organizations");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

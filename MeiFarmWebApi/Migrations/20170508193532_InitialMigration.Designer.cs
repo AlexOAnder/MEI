@@ -8,8 +8,8 @@ using MeiFarmWebApi.Contexts;
 namespace MeiFarmWebApi.Migrations
 {
     [DbContext(typeof(FarmAppContext))]
-    [Migration("20170508105313_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20170508193532_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,17 +74,15 @@ namespace MeiFarmWebApi.Migrations
 
                     b.Property<Guid>("AdditionalMedicamentId");
 
-                    b.Property<bool>("AutoUpdatableRecipe");
-
                     b.Property<DateTime>("Created");
 
                     b.Property<Guid>("CreatedById");
 
                     b.Property<DateTime>("Expired");
 
-                    b.Property<bool>("IsPaidReceipt");
-
                     b.Property<Guid>("MedicamentId");
+
+                    b.Property<Guid>("RecipeTypeId");
 
                     b.HasKey("Id");
 
@@ -93,6 +91,8 @@ namespace MeiFarmWebApi.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("MedicamentId");
+
+                    b.HasIndex("RecipeTypeId");
 
                     b.ToTable("Recipes");
                 });
@@ -136,7 +136,9 @@ namespace MeiFarmWebApi.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<Guid>("OrganizationId");
+                    b.Property<Guid?>("OrganizationId");
+
+                    b.Property<Guid>("RoleId");
 
                     b.Property<string>("Sex");
 
@@ -144,67 +146,46 @@ namespace MeiFarmWebApi.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("MeiFarmWebApi.Models.UsersToRolesModel", b =>
-                {
-                    b.Property<Guid>("UserId");
-
-                    b.Property<Guid>("RoleId");
-
-                    b.HasKey("UserId");
-
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UsersToRoles");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MeiFarmWebApi.Models.MedicamentModel", b =>
                 {
                     b.HasOne("MeiFarmWebApi.Models.MedicamentsTypesModel", "FarmType")
                         .WithMany()
-                        .HasForeignKey("FarmTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("FarmTypeId");
                 });
 
             modelBuilder.Entity("MeiFarmWebApi.Models.RecipeModel", b =>
                 {
                     b.HasOne("MeiFarmWebApi.Models.MedicamentModel", "AdditionalMedicament")
                         .WithMany()
-                        .HasForeignKey("AdditionalMedicamentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("AdditionalMedicamentId");
 
                     b.HasOne("MeiFarmWebApi.Models.UserModel", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("MeiFarmWebApi.Models.MedicamentModel", "Medicament")
                         .WithMany()
-                        .HasForeignKey("MedicamentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("MedicamentId");
+
+                    b.HasOne("MeiFarmWebApi.Models.RecipesTypeModel", "RecipeType")
+                        .WithMany()
+                        .HasForeignKey("RecipeTypeId");
                 });
 
             modelBuilder.Entity("MeiFarmWebApi.Models.UserModel", b =>
                 {
                     b.HasOne("MeiFarmWebApi.Models.OrganizationModel", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
+                        .HasForeignKey("OrganizationId");
 
-            modelBuilder.Entity("MeiFarmWebApi.Models.UsersToRolesModel", b =>
-                {
                     b.HasOne("MeiFarmWebApi.Models.RoleModel", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MeiFarmWebApi.Models.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId");
                 });
         }
     }

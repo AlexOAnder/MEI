@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using MeiFarmWebApi.Models;
 
 namespace MeiFarmWebApi.Interfaces
@@ -6,7 +8,9 @@ namespace MeiFarmWebApi.Interfaces
     {
         void Add(RecipeModel model);
         void Update(RecipeModel model);
-        void Get();
-        void Delete();
+        RecipeModel Get(Guid Id);
+        IList<RecipeModel> GetAll();
+        void GetAllForUser(Guid id);
+        void Delete(Guid id);
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MeiFarmWebApi.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MeiFarmWebApi.Contexts
 {
@@ -17,8 +19,16 @@ namespace MeiFarmWebApi.Contexts
         public DbSet<RecipesTypeModel>  RecipesTypes {get;set;}
 
         public DbSet<RoleModel> Roles {get;set;}
-        public DbSet<UsersToRolesModel> UsersToRoles {get;set;}
 
+        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        {
+            foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
+            base.OnModelCreating(modelbuilder);
+        }
      /*   protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecipeModel>()

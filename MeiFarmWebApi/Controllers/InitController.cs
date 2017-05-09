@@ -24,7 +24,6 @@ namespace MeiFarmWebApi.Controllers
             if (value){
                 db.Medicaments.RemoveRange(db.Medicaments);
                 db.MedicamentsTypes.RemoveRange(db.MedicamentsTypes);
-                db.UsersToRoles.RemoveRange(db.UsersToRoles);
                 db.Users.RemoveRange(db.Users);
                 db.Roles.RemoveRange(db.Roles);
                 db.Organizations.RemoveRange(db.Organizations);
@@ -35,18 +34,74 @@ namespace MeiFarmWebApi.Controllers
             }
             if (!db.Medicaments.Any())
             {
+                OrganizationModel org0 = new OrganizationModel
+                {
+                    Id = Guid.Empty,
+                    Name = "No organization",
+                    Address = "No Address"
+                };
                 OrganizationModel org1 = new OrganizationModel
                 {
                     Name = "BelMeiFarm",
                     Address = " Minsk, s. Panamareva 5, 220056"
                 };
+                OrganizationModel org2 = new OrganizationModel
+                {
+                    Name = "BelPharmasevtika",
+                    Address = " Minsk, s. Panamareva 12, 220056"
+                };
+                db.Organizations.Add(org0);
+                db.Organizations.Add(org1);
+                db.Organizations.Add(org2);
+                RoleModel role1 = new RoleModel { Name = "Admin" };
+                RoleModel role2 = new RoleModel { Name = "Patient" };
+                RoleModel role3 = new RoleModel { Name = "Doctor" };
+                RoleModel role4 = new RoleModel { Name = "Apothecary/Pharmacist" };
+                db.Roles.Add(role1);
+                db.Roles.Add(role2);
+                db.Roles.Add(role3);
+                db.Roles.Add(role4);
+
                 UserModel usr1 = new UserModel
                 {
                     FirstName = "admin",
                     LastName = "admin",
                     Organization = org1,
-                    BirthDate = DateTime.Now
+                    BirthDate = DateTime.Now,
+                    Role = role1
                 };
+                UserModel usr2 = new UserModel
+                {
+                    FirstName = "Alexandra",
+                    LastName = "Malevskaia",
+                    Organization = org1,
+                    Sex = "Female",
+                    BirthDate = DateTime.Now,
+                    Role = role3
+                };
+                 UserModel usr3 = new UserModel
+                { // patient
+                    FirstName = "Alexandr",
+                    LastName = "Vizimov",
+                    Sex = "Male",
+                    Organization = org0,
+                    BirthDate = DateTime.Now,
+                    Role = role2
+                };
+                UserModel usr4 = new UserModel
+                {
+                    FirstName = "Olga",
+                    LastName = "Karajevich",
+                    Sex = "Female",
+                    Organization = org2,
+                    BirthDate = DateTime.Now,
+                    Role = role4
+                };
+                db.Users.Add(usr1);
+                db.Users.Add(usr2);
+                db.Users.Add(usr3);
+                db.Users.Add(usr4);
+
                 MedicamentsTypesModel type1 = new MedicamentsTypesModel { Name = "Tablets" };
                 MedicamentsTypesModel type2 = new MedicamentsTypesModel { Name = "Capsules" };
                 MedicamentsTypesModel type3 = new MedicamentsTypesModel { Name = "Ampoules" };
