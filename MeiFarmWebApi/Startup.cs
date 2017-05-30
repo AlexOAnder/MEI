@@ -7,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MeiFarmWebApi.Models;
+using System;
 
 namespace MeiFarmWebApi
 {
@@ -34,17 +36,44 @@ namespace MeiFarmWebApi
             // Run dotnet ef database update to apply the new migration to the database. This command creates the database before applying migrations.
             // dotnet ef database update 0 to return to a clean db (instead of 0 we can put the name of the migration. 0 is a clean db)
             // dotnet ef migrations remove to remove last of the migrations
-            services.AddDbContext<FarmAppContext>(options => options.UseSqlServer(conn));
-          /*  services.AddDbContext<IdentityDbContext>(options => 
+            services.AddDbContext<FarmAppContext>(options => options.UseSqlServer(conn,
+                optionsBuilder => optionsBuilder.MigrationsAssembly("MeiFarmWebApi")));
+            /*  services.AddDbContext<IdentityDbContext>(options => 
                     options.UseSqlServer(conn, 
                         optionsBuilder => optionsBuilder.MigrationsAssembly("MeiFarmWebApi"))); 
+            */
+            services.AddIdentity<UserModel, IdentityRole>(options => {
+                    options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+                })
+                .AddEntityFrameworkStores<FarmAppContext>()
+                .AddDefaultTokenProviders();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddDefaultTokenProviders();*/
+            services.Configure<IdentityOptions>(options => {
+                 // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;     
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                
+                // Cookie settings
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+                options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+                options.Cookies.ApplicationCookie.LogoutPath = "/Account/Logout";
+                
+                // User settings
+                options.User.RequireUniqueEmail = true;           
+            });
+
 
             services.AddTransient<IConnectionService, ConnectionService>();
             services.AddTransient<IRecipeService, RecipeService>();
+
+
             // Add framework services.
             services.AddMvc();
         }
@@ -53,7 +82,7 @@ namespace MeiFarmWebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-
+            
             if (env.IsDevelopment())
             {
                 // то выводим информацию об ошибке, при наличии ошибки
@@ -61,8 +90,8 @@ namespace MeiFarmWebApi
             }
             
             loggerFactory.AddDebug();
-           /* app.UseIdentity();
-            app.UseStaticFiles();  */
+            app.UseIdentity();
+            app.UseStaticFiles(); 
             app.UseMvc();
         }
     }

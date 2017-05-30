@@ -8,9 +8,10 @@ using MeiFarmWebApi.Contexts;
 namespace MeiFarmWebApi.Migrations
 {
     [DbContext(typeof(FarmAppContext))]
-    partial class FarmAppContextModelSnapshot : ModelSnapshot
+    [Migration("20170509133509_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using MeiFarmWebApi.Contexts;
 using MeiFarmWebApi.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeiFarmWebApi.Controllers
@@ -28,6 +29,7 @@ namespace MeiFarmWebApi.Controllers
                 db.Roles.RemoveRange(db.Roles);
                 db.Organizations.RemoveRange(db.Organizations);
                 db.RecipesTypes.RemoveRange(db.RecipesTypes);
+                db.UserRoles.RemoveRange(db.UserRoles);
                 db.Recipes.RemoveRange(db.Recipes);
                 db.SaveChanges();
                 Console.WriteLine("Db was cleaned");
@@ -53,10 +55,10 @@ namespace MeiFarmWebApi.Controllers
                 db.Organizations.Add(org0);
                 db.Organizations.Add(org1);
                 db.Organizations.Add(org2);
-                RoleModel role1 = new RoleModel { Name = "Admin" };
-                RoleModel role2 = new RoleModel { Name = "Patient" };
-                RoleModel role3 = new RoleModel { Name = "Doctor" };
-                RoleModel role4 = new RoleModel { Name = "Apothecary/Pharmacist" };
+                IdentityRole role1 = new IdentityRole { Name = "Admin" };
+                IdentityRole role2 = new IdentityRole { Name = "Patient" };
+                IdentityRole role3 = new IdentityRole { Name = "Doctor" };
+                IdentityRole role4 = new IdentityRole { Name = "Apothecary/Pharmacist" };
                 db.Roles.Add(role1);
                 db.Roles.Add(role2);
                 db.Roles.Add(role3);
@@ -68,7 +70,6 @@ namespace MeiFarmWebApi.Controllers
                     LastName = "admin",
                     Organization = org1,
                     BirthDate = DateTime.Now,
-                    Role = role1
                 };
                 UserModel usr2 = new UserModel
                 {
@@ -77,7 +78,6 @@ namespace MeiFarmWebApi.Controllers
                     Organization = org1,
                     Sex = "Female",
                     BirthDate = DateTime.Now,
-                    Role = role3
                 };
                  UserModel usr3 = new UserModel
                 { // patient
@@ -86,7 +86,6 @@ namespace MeiFarmWebApi.Controllers
                     Sex = "Male",
                     Organization = org0,
                     BirthDate = DateTime.Now,
-                    Role = role2
                 };
                 UserModel usr4 = new UserModel
                 {
@@ -95,13 +94,32 @@ namespace MeiFarmWebApi.Controllers
                     Sex = "Female",
                     Organization = org2,
                     BirthDate = DateTime.Now,
-                    Role = role4
                 };
                 db.Users.Add(usr1);
                 db.Users.Add(usr2);
                 db.Users.Add(usr3);
                 db.Users.Add(usr4);
 
+                IdentityUserRole<string> usrRole1= new IdentityUserRole<string>{
+                    UserId = usr1.Id,
+                    RoleId = role1.Id
+                };
+                IdentityUserRole<string> usrRole2= new IdentityUserRole<string>{
+                    UserId = usr2.Id,
+                    RoleId = role3.Id
+                };
+                IdentityUserRole<string> usrRole3= new IdentityUserRole<string>{
+                    UserId = usr3.Id,
+                    RoleId = role2.Id
+                };
+                IdentityUserRole<string> usrRole4= new IdentityUserRole<string>{
+                    UserId = usr4.Id,
+                    RoleId = role4.Id
+                };
+                db.UserRoles.Add(usrRole1);
+                db.UserRoles.Add(usrRole2);
+                db.UserRoles.Add(usrRole3);
+                db.UserRoles.Add(usrRole4);
                 MedicamentsTypesModel type1 = new MedicamentsTypesModel { Name = "Tablets" };
                 MedicamentsTypesModel type2 = new MedicamentsTypesModel { Name = "Capsules" };
                 MedicamentsTypesModel type3 = new MedicamentsTypesModel { Name = "Ampoules" };
